@@ -572,43 +572,43 @@ void KidsizeStrategy::Trace_period(){  //舊策略找週期
 
 }
 void KidsizeStrategy::Start_timer(ros::NodeHandle nh) {  //等待符合條件進行中斷射擊
-    /*/if(Periodtime < 4300)//週期小於轉腰的時間要將週期x2
+    if(Periodtime < 4300)//週期小於轉腰的時間要將週期x2
     {
         countdown_time = 2*Periodtime - dirdata[3];
     }
     else
     {
         countdown_time = Periodtime - dirdata[3];
-    }*/
+    }
 // judge automaticlly testing
 
-    if(Periodtime < 3000 )//週期小於轉腰的時間要將週期x2
-    {
-        countdown_time = (((Periodtime-2800)/100*0.004)+ (dirdata[3]/100))*Periodtime +dirdata[8];//
-        ROS_INFO("111111111111111111111111111111111");
-    }
-    else if(Periodtime >= 3000 && Periodtime < 5200)
-    {
-        countdown_time = (((Periodtime-3000)/100*0.008)+ (dirdata[3]/100))*Periodtime +dirdata[9];
-        ROS_INFO("222222222222222222222222222222222");
+//     if(Periodtime < 3000 )//週期小於轉腰的時間要將週期x2
+//     {
+//         countdown_time = (((Periodtime-2800)/100*0.004)+ (dirdata[3]/100))*Periodtime +dirdata[8];//
+//         ROS_INFO("111111111111111111111111111111111");
+//     }
+//     else if(Periodtime >= 3000 && Periodtime < 5200)
+//     {
+//         countdown_time = (((Periodtime-3000)/100*0.008)+ (dirdata[3]/100))*Periodtime +dirdata[9];
+//         ROS_INFO("222222222222222222222222222222222");
 
-    }
-   else if(Periodtime >= 5200 && Periodtime < 10000)
-    {
-        countdown_time = (((Periodtime-4300)/100*0.0020)+ (dirdata[5]/1000))*Periodtime +dirdata[10];//0.0017
-        ROS_INFO("333333333333333333333333333333333");
+//     }
+//    else if(Periodtime >= 5200 && Periodtime < 10000)
+//     {
+//         countdown_time = (((Periodtime-4300)/100*0.0020)+ (dirdata[5]/1000))*Periodtime +dirdata[10];//0.0017
+//         ROS_INFO("333333333333333333333333333333333");
 
-    }
-    else if(Periodtime >= 10000 && Periodtime < 20000)
-    {
-        countdown_time = (((Periodtime-10000)/100*0.00085)+ ((dirdata[5]/1000)+0.1))*Periodtime +dirdata[11];
-        ROS_INFO("44444444444444444444444444444444");
+//     }
+//     else if(Periodtime >= 10000 && Periodtime < 20000)
+//     {
+//         countdown_time = (((Periodtime-10000)/100*0.00085)+ ((dirdata[5]/1000)+0.1))*Periodtime +dirdata[11];
+//         ROS_INFO("44444444444444444444444444444444");
 
-    }
-    else{
-        countdown_time = 0.96*Periodtime +dirdata[12];
-        ROS_INFO("555555555555555555555555555555");
-    }
+//     }
+//     else{
+//         countdown_time = 0.96*Periodtime +dirdata[12];
+//         ROS_INFO("555555555555555555555555555555");
+//     }
 
     ROS_INFO("x = %d, x_low = %d", Archeryinfo->RedTarget.X, target_x_low_ave);
     ROS_INFO("y = %d, y_low = %d", Archeryinfo->RedTarget.Y, target_y_low);
