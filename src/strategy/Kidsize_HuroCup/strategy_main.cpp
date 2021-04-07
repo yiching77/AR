@@ -574,11 +574,11 @@ void KidsizeStrategy::Trace_period(){  //舊策略找週期
 void KidsizeStrategy::Start_timer(ros::NodeHandle nh) {  //等待符合條件進行中斷射擊
     if(Periodtime < 5000)//週期小於轉腰的時間要將週期x2
     {
-        countdown_time = 2*Periodtime - dirdata[3];
+        countdown_time = 3*Periodtime - dirdata[3];
     }
     else
     {
-        countdown_time = Periodtime - dirdata[3];
+        countdown_time = 2*Periodtime - dirdata[3];
     }
 // judge automaticlly testing
 
