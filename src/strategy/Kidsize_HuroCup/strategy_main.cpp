@@ -749,9 +749,18 @@ void KidsizeStrategy::Trace_target_waist() {  //執行轉腰抬手function
     //    ROS_INFO("none");
     //}
 
-    hand_up_cnt = (-(target_y_low - dirdata[13]) )/ 5.5 ;//抬手次數
-    turn_waist_position = (-(target_x_low_ave - 160))/1*2 + turn_waist_cnt*(Archeryinfo->WaistTurnPosition);//轉腰次數
-    ROS_INFO("turnwaistposition:%d", turn_waist_position);
+    hand_up_cnt = (-(target_y_low - dirdata[13]) )/ 4.5 ;//抬手次數     5.5 
+    if(hand_up_cnt >= 5)
+    {
+        turn_waist_position = (-(target_x_low_ave - 190))/1*1 + turn_waist_cnt*(Archeryinfo->WaistTurnPosition);
+        hand_up_cnt = hand_up_cnt + 1;
+        ROS_INFO("    >1    turnwaistposition:%d", turn_waist_position);
+    }
+    else
+    {
+        turn_waist_position = (-(target_x_low_ave - 160))/1*2 + turn_waist_cnt*(Archeryinfo->WaistTurnPosition); //
+        ROS_INFO("    <1    turnwaistposition:%d", turn_waist_position);
+    }
     ros_com->sendSingleMotor(9, turn_waist_position, 50); 
     DelayspinOnce(500);
     if (hand_up_cnt > 0)
@@ -783,6 +792,7 @@ void KidsizeStrategy::Trace_target_waist() {  //執行轉腰抬手function
 }
 void KidsizeStrategy::Shooting_target(const ros::TimerEvent& event){ //射擊function
     ROS_INFO("Shooting");
+    
     
     ros_com->sendBodySector(Shooting);
     DelayspinOnce(1000);
@@ -909,6 +919,7 @@ void KidsizeStrategy::strategymain(ros::NodeHandle nh)
                     ROS_INFO("DIO = %d",strategy_info->DIOValue.DInput); 
                     ROS_INFO("Periodtime = %f",Periodtime);
                     ROS_INFO("turnwaistposition = %d",turn_waist_position);
+                    ROS_INFO("turnwaistcont = %d",turn_waist_cnt);
                     ROS_INFO("hand_up_cnt = %d ",hand_up_cnt);
                     ROS_INFO("countdown_time = %f", countdown_time);
                     ROS_INFO("end");
