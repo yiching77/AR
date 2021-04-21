@@ -749,10 +749,10 @@ void KidsizeStrategy::Trace_target_waist() {  //執行轉腰抬手function
     //    ROS_INFO("none");
     //}
 
-    hand_up_cnt = (-(target_y_low - dirdata[13]) )/ 4.5 ;//抬手次數     5.5 
+    hand_up_cnt = (-(target_y_low - dirdata[13]) )/ 4.25 ;//抬手次數     5.5 
     if(hand_up_cnt >= 5)
     {
-        turn_waist_position = (-(target_x_low_ave - 190))/1*1 + turn_waist_cnt*(Archeryinfo->WaistTurnPosition);
+        turn_waist_position = (-(target_x_low_ave - 165))/1*2 + turn_waist_cnt*(Archeryinfo->WaistTurnPosition);
         hand_up_cnt = hand_up_cnt + 1;
         ROS_INFO("    >1    turnwaistposition:%d", turn_waist_position);
     }
@@ -771,6 +771,9 @@ void KidsizeStrategy::Trace_target_waist() {  //執行轉腰抬手function
         {
             ros_com->sendBodySector(Raise_Hand);//執行36磁區
             DelayspinOnce(150);
+            // ros_com->sendSingleMotor(9, -4, 50);
+            // ROS_INFO("turnright");
+            // DelayspinOnce(150);
             hand_up_cnt = hand_up_cnt - 1 ;
         }
     }
