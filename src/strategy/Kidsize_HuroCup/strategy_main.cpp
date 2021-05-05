@@ -149,13 +149,13 @@ void KidsizeStrategy::Gamestart_Initialization(){  //初始化參數
             HeadPosition(HeadMotorID::VerticalID,2077,120);
             DelayspinOnce(50);
             HeadPosition(HeadMotorID::VerticalID,2077,120);
-            DelayspinOnce(500);
+            DelayspinOnce(800);
             HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
             DelayspinOnce(50);
             HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
             DelayspinOnce(50);
             HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
-            DelayspinOnce(500);
+            DelayspinOnce(800);
             prepare_flag = true;
         }
 	    HeadPosition(HeadMotorID::VerticalID,2047,120);
@@ -877,6 +877,7 @@ void KidsizeStrategy::strategymain(ros::NodeHandle nh)
 		timer_f.start();
         //tool->Delay(2000);
         ROS_INFO("case_%d",Archeryinfo->Robot_state);
+        ROS_INFO(" read_head_position = %d",  Archeryinfo->HorizontalHeadPosition);
         switch(Archeryinfo->Robot_state)
         {
             case Initialization:  //初始化
@@ -946,11 +947,11 @@ void KidsizeStrategy::strategymain(ros::NodeHandle nh)
             HeadPosition(HeadMotorID::VerticalID,2007,120);
             HeadPosition(HeadMotorID::VerticalID,2007,120);
             HeadPosition(HeadMotorID::VerticalID,2007,120);
-            DelayspinOnce(500);
+            DelayspinOnce(800);
             HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
             HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
             HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
-            DelayspinOnce(500);
+            DelayspinOnce(800);
             prepare_flag = true;																																																																																					
             sendbodystandflag = false;
             ROS_INFO("Red size = %d",Archeryinfo->RedTarget.size);
