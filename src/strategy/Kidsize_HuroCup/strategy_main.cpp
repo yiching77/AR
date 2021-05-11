@@ -139,23 +139,23 @@ void KidsizeStrategy::Gamestart_Initialization(){  //初始化參數
         if(!prepare_flag)  //若在比賽前沒有執行預備動作 則在init內執行
         {
             DelayspinOnce(1000);
+            read_head_position();
+            HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
+            DelayspinOnce(50);
+            // HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
+            // DelayspinOnce(50);
+            HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
+            DelayspinOnce(50);
+            HeadPosition(HeadMotorID::VerticalID,2077,120);  //將頭轉低30度 開策略轉回正常刻度 為了確認只播是否有撥成功
+            DelayspinOnce(50);
+            // HeadPosition(HeadMotorID::VerticalID,2077,120);
+            // DelayspinOnce(50);
+            HeadPosition(HeadMotorID::VerticalID,2077,120);
+            DelayspinOnce(50);
             ros_com->sendBodySector(Preparatoryaction);  //call sector34
             DelayspinOnce(3000);
             ROS_INFO("PREPARE");
-            read_head_position();
             Archeryinfo->Initialization_function();
-            HeadPosition(HeadMotorID::VerticalID,2077,120);  //將頭轉低30度 開策略轉回正常刻度 為了確認只播是否有撥成功
-            DelayspinOnce(50);
-            HeadPosition(HeadMotorID::VerticalID,2077,120);
-            DelayspinOnce(50);
-            HeadPosition(HeadMotorID::VerticalID,2077,120);
-            DelayspinOnce(500);
-            HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
-            DelayspinOnce(50);
-            HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
-            DelayspinOnce(50);
-            HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
-            DelayspinOnce(500);
             prepare_flag = true;
         }
 	    HeadPosition(HeadMotorID::VerticalID,2047,120);
@@ -222,45 +222,45 @@ void KidsizeStrategy::Find_target(){  //找目標靶副函式
         }
     }
            
-    if(!find_target_flag)  //沒找到目標靶
-    {
-        switch(Archeryinfo->HeadTurnSide)
-        {
-            case TurnRight:  //頭向右轉
-                if ((Archeryinfo->HorizontalHeadPosition - Archeryinfo->HeadTurnPosition) > Archeryinfo->NewpullHorizontalMinAngle)//HorizontalMinAngle 2745
-                {
-                    headbug_cnt++;
-                    ROS_INFO("LOOOOOOOOOOOOOOOOOOOOOK    =====     %d",headbug_cnt); //防止到點的第一瞬間沒抓到靶造成錯誤修正
-                    if(headbug_cnt>100)
-                    {
-                        ROS_INFO("Find_target_head Turn Right");
-                        HeadPosition(HeadMotorID::HorizontalID,Archeryinfo->HorizontalHeadPosition - Archeryinfo->HeadTurnPosition,120);
-                        turn_waist_cnt++;
-                        DelayspinOnce(150);
-                    }
-                }
-                else  //超過轉頭極限則換方向
-                {
-                    ROS_INFO("Turn Right ELSE");
-                    Archeryinfo->HeadTurnSide = TurnLeft;
-                }
-                break;
-            case TurnLeft:  //頭向左轉
-                if ((Archeryinfo->HorizontalHeadPosition + Archeryinfo->HeadTurnPosition) < Archeryinfo->NewpullHorizontalMaxAngle)//HorizontalMaxAngle 3400
-                {
-                    ROS_INFO("Find_target_head Turn Left");
-                    HeadPosition(HeadMotorID::HorizontalID, Archeryinfo->HorizontalHeadPosition + Archeryinfo->HeadTurnPosition,120);
-                    turn_waist_cnt--;
-                    DelayspinOnce(150);
-                }
-                else  //超過轉頭極限則換方向
-                {
-                    ROS_INFO("Turn Left ELSE");
-                    Archeryinfo->HeadTurnSide = TurnRight;
-                }
-                break;
-        }
-    }
+    // if(!find_target_flag)  //沒找到目標靶
+    // {
+    //     switch(Archeryinfo->HeadTurnSide)
+    //     {
+    //         case TurnRight:  //頭向右轉
+    //             if ((Archeryinfo->HorizontalHeadPosition - Archeryinfo->HeadTurnPosition) > Archeryinfo->NewpullHorizontalMinAngle)//HorizontalMinAngle 2745
+    //             {
+    //                 headbug_cnt++;
+    //                 ROS_INFO("LOOOOOOOOOOOOOOOOOOOOOK    =====     %d",headbug_cnt); //防止到點的第一瞬間沒抓到靶造成錯誤修正
+    //                 if(headbug_cnt>100)
+    //                 {
+    //                     ROS_INFO("Find_target_head Turn Right");
+    //                     HeadPosition(HeadMotorID::HorizontalID,Archeryinfo->HorizontalHeadPosition - Archeryinfo->HeadTurnPosition,120);
+    //                     turn_waist_cnt++;
+    //                     DelayspinOnce(150);
+    //                 }
+    //             }
+    //             else  //超過轉頭極限則換方向
+    //             {
+    //                 ROS_INFO("Turn Right ELSE");
+    //                 Archeryinfo->HeadTurnSide = TurnLeft;
+    //             }
+    //             break;
+    //         case TurnLeft:  //頭向左轉
+    //             if ((Archeryinfo->HorizontalHeadPosition + Archeryinfo->HeadTurnPosition) < Archeryinfo->NewpullHorizontalMaxAngle)//HorizontalMaxAngle 3400
+    //             {
+    //                 ROS_INFO("Find_target_head Turn Left");
+    //                 HeadPosition(HeadMotorID::HorizontalID, Archeryinfo->HorizontalHeadPosition + Archeryinfo->HeadTurnPosition,120);
+    //                 turn_waist_cnt--;
+    //                 DelayspinOnce(150);
+    //             }
+    //             else  //超過轉頭極限則換方向
+    //             {
+    //                 ROS_INFO("Turn Left ELSE");
+    //                 Archeryinfo->HeadTurnSide = TurnRight;
+    //             }
+    //             break;
+    //     }
+    // }
 }
 
 void KidsizeStrategy::Find_target_mode() {  //找目標靶方式
@@ -758,7 +758,7 @@ void KidsizeStrategy::Trace_target_waist() {  //執行轉腰抬手function
     }
     else
     {
-        turn_waist_position = (-(target_x_low_ave - 160))/1*2 + turn_waist_cnt*(Archeryinfo->WaistTurnPosition); //
+        turn_waist_position = (-(target_x_low_ave - 160))/1*1.95 + turn_waist_cnt*(Archeryinfo->WaistTurnPosition); //
         ROS_INFO("    <1    turnwaistposition:%d", turn_waist_position);
     }
     ros_com->sendSingleMotor(9, turn_waist_position, 50); 
