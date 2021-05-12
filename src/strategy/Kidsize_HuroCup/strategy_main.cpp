@@ -143,19 +143,19 @@ void KidsizeStrategy::Gamestart_Initialization(){  //初始化參數
             DelayspinOnce(3000);
             ROS_INFO("PREPARE");
             read_head_position();
-            Archeryinfo->Initialization_function();
             HeadPosition(HeadMotorID::VerticalID,2077,120);  //將頭轉低30度 開策略轉回正常刻度 為了確認只播是否有撥成功
             DelayspinOnce(50);
             HeadPosition(HeadMotorID::VerticalID,2077,120);
             DelayspinOnce(50);
             HeadPosition(HeadMotorID::VerticalID,2077,120);
             DelayspinOnce(500);
-            HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
+            HeadPosition(HeadMotorID::HorizontalID,dirdata[0],100);
             DelayspinOnce(50);
-            HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
+            HeadPosition(HeadMotorID::HorizontalID,dirdata[0],100);
             DelayspinOnce(50);
-            HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
+            HeadPosition(HeadMotorID::HorizontalID,dirdata[0],100);
             DelayspinOnce(500);
+            Archeryinfo->Initialization_function();
             prepare_flag = true;
         }
 	    HeadPosition(HeadMotorID::VerticalID,2047,120);
