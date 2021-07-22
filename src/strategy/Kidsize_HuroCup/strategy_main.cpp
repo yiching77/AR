@@ -973,4 +973,3 @@ void KidsizeStrategy::strategymain(ros::NodeHandle nh)
     
     }
 }
-
