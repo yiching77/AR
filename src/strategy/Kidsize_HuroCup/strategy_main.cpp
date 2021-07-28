@@ -264,33 +264,33 @@ void KidsizeStrategy::Find_target(){  //找目標靶副函式
 }
 
 void KidsizeStrategy::Find_target_mode() {  //找目標靶方式
+    /* 新策略(找最高最低點) */
     if(strategy_info->DIOValue.DInput == 29)  //101 指撥功能 小轉腰
     {
         i++;
         y[i] = Archeryinfo->RedTarget.Y;
         x[i] = Archeryinfo->RedTarget.X;
         
-        /*if(y[i] > y[i-1])//找最低
-        {*/
+        if(y[i] > y[i-1])//找最低
+        {
             ROS_INFO("find_target_lowest");
             Archeryinfo->Robot_state =find_Target_y;
             Archeryinfo->Find_y_state = find_target_lowest;
-        /*}
+        }
         else if(y[i] < y[i-1])//找最高
         {
             ROS_INFO("find_target_highest");
             Archeryinfo->Robot_state =find_Target_y;
             Archeryinfo->Find_y_state = find_target_highest;
-        }*/
+        }
         
     }
-    //新策略(找最高最低點)
-    else 
+    else  /* 不動靶策略 */
     {
         target_x_low_ave = Archeryinfo->RedTarget.X;
         target_y_low = Archeryinfo->RedTarget.Y;
-        Archeryinfo->Robot_state = find_target_mode_old;	
-        
+        Archeryinfo->Robot_state = start_timer;
+        Periodtime = 5000;  //shooting after 5sec 
     }
 }
 
@@ -361,11 +361,11 @@ void KidsizeStrategy::Find_Target_y(){
                         }
                     }
                 }
-                /*else
+                else
                 {
                     ROS_INFO("find_target_lowest_end!");
                     Archeryinfo->Find_y_state = find_target_highest;
-                }*/
+                }
                 break;
             case find_target_highest:  //抓靶到最高點
                 ROS_INFO("find_target_highest");
@@ -575,43 +575,43 @@ void KidsizeStrategy::Trace_period(){  //舊策略找週期
 
 }
 void KidsizeStrategy::Start_timer(ros::NodeHandle nh) {  //等待符合條件進行中斷射擊
-    /*/if(Periodtime < 4300)//週期小於轉腰的時間要將週期x2
+    if(Periodtime < 4300)//週期小於轉腰的時間要將週期x2
     {
         countdown_time = 2*Periodtime - dirdata[3];
     }
     else
     {
         countdown_time = Periodtime - dirdata[3];
-    }*/
+    }
 // judge automaticlly testing
 
-    if(Periodtime < 3000 )//週期小於轉腰的時間要將週期x2
-    {
-        countdown_time = (((Periodtime-2800)/100*0.004)+ (dirdata[3]/100))*Periodtime +dirdata[8];//
-        ROS_INFO("111111111111111111111111111111111");
-    }
-    else if(Periodtime >= 3000 && Periodtime < 5200)
-    {
-        countdown_time = (((Periodtime-3000)/100*0.008)+ (dirdata[3]/100))*Periodtime +dirdata[9];
-        ROS_INFO("222222222222222222222222222222222");
+//     if(Periodtime < 3000 )//週期小於轉腰的時間要將週期x2
+//     {
+//         countdown_time = (((Periodtime-2800)/100*0.004)+ (dirdata[3]/100))*Periodtime +dirdata[8];//
+//         ROS_INFO("111111111111111111111111111111111");
+//     }
+//     else if(Periodtime >= 3000 && Periodtime < 5200)
+//     {
+//         countdown_time = (((Periodtime-3000)/100*0.008)+ (dirdata[3]/100))*Periodtime +dirdata[9];
+//         ROS_INFO("222222222222222222222222222222222");
 
-    }
-   else if(Periodtime >= 5200 && Periodtime < 10000)
-    {
-        countdown_time = (((Periodtime-4300)/100*0.0020)+ (dirdata[5]/1000))*Periodtime +dirdata[10];//0.0017
-        ROS_INFO("333333333333333333333333333333333");
+//     }
+//    else if(Periodtime >= 5200 && Periodtime < 10000)
+//     {
+//         countdown_time = (((Periodtime-4300)/100*0.0020)+ (dirdata[5]/1000))*Periodtime +dirdata[10];//0.0017
+//         ROS_INFO("333333333333333333333333333333333");
 
-    }
-    else if(Periodtime >= 10000 && Periodtime < 20000)
-    {
-        countdown_time = (((Periodtime-10000)/100*0.00085)+ ((dirdata[5]/1000)+0.1))*Periodtime +dirdata[11];
-        ROS_INFO("44444444444444444444444444444444");
+//     }
+//     else if(Periodtime >= 10000 && Periodtime < 20000)
+//     {
+//         countdown_time = (((Periodtime-10000)/100*0.00085)+ ((dirdata[5]/1000)+0.1))*Periodtime +dirdata[11];
+//         ROS_INFO("44444444444444444444444444444444");
 
-    }
-    else{
-        countdown_time = 0.96*Periodtime +dirdata[12];
-        ROS_INFO("555555555555555555555555555555");
-    }
+//     }
+//     else{
+//         countdown_time = 0.96*Periodtime +dirdata[12];
+//         ROS_INFO("555555555555555555555555555555");
+//     }
 
     ROS_INFO("x = %d, x_low = %d", Archeryinfo->RedTarget.X, target_x_low_ave);
     ROS_INFO("y = %d, y_low = %d", Archeryinfo->RedTarget.Y, target_y_low);
