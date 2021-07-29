@@ -155,7 +155,7 @@ void KidsizeStrategy::Gamestart_Initialization(){  //初始化參數
             HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
             DelayspinOnce(50);
             HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
-            DelayspinOnce(500);
+            DelayspinOnce(1500);
             prepare_flag = true;
         }
 	    HeadPosition(HeadMotorID::VerticalID,2047,120);
@@ -169,7 +169,7 @@ void KidsizeStrategy::Gamestart_Initialization(){  //初始化參數
         HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
         DelayspinOnce(50);
         HeadPosition(HeadMotorID::HorizontalID,dirdata[0],50);
-        DelayspinOnce(500);
+        DelayspinOnce(1500);
         i = 0;
         DIOSTARTAGAIN =true;  //變成true讓初始化參數迴圈不會再執行一次
     	sendbodystandflag = false;  //初始化站姿flag
@@ -193,8 +193,10 @@ void KidsizeStrategy::Gamestart_Initialization(){  //初始化參數
         target_y_low = 0;  //初始化最低點y值
         target_x_low_sum = 0;  //初始化最低點x平均
         target_x_high_sum = 0;  //初始化最高點x平均
+        target_x_low_ave = 0;
         oldstrategy_find_low_time = 5000;  //初始化舊策略找最低點花費時間
     	Archeryinfo->Robot_state = find_target; 
+        fixed_target = false;
     }   
 }
 void KidsizeStrategy::Draw_Function(){  //在人機介面之影像畫線
@@ -287,10 +289,12 @@ void KidsizeStrategy::Find_target_mode() {  //找目標靶方式
     }
     else  /* 不動靶策略 */
     {
-        target_x_low_ave = Archeryinfo->RedTarget.X;
-        target_y_low = Archeryinfo->RedTarget.Y;
-        Archeryinfo->Robot_state = start_timer;
+        // target_x_low_ave = Archeryinfo->RedTarget.X;
+        // target_y_low = Archeryinfo->RedTarget.Y;
+        // Archeryinfo->Robot_state = start_timer;
+        Archeryinfo->Robot_state = find_target_mode_old;
         Periodtime = 5000;  //shooting after 5sec 
+        fixed_target = true;
     }
 }
 
@@ -513,17 +517,18 @@ void KidsizeStrategy::Find_target_mode_old(){	//舊策略
     oldstrategy_timeuse = (1000000*(tend.tv_sec - tstart.tv_sec) + (tend.tv_usec - tstart.tv_usec))/1000;
     if (oldstrategy_timeuse < oldstrategy_find_low_time)//8sec
     {
-        Ycmpvalue= Archeryinfo->RedTarget.Y;  //目標靶當前y值
+        Ycmpvalue = Archeryinfo->RedTarget.Y;  //目標靶當前y值
         if (!target_low_flag)
         {
             target_y_low = Archeryinfo->RedTarget.Y;  //取第一個y值用來判斷
+            target_x_low_ave = Archeryinfo->RedTarget.X;
             target_low_flag = true;  //取到最低點後flag變true
         }
-        else if (target_low_flag)
+        else
         {                               
             if (Ycmpvalue >= target_y_low)  //與基準值做判斷
             {
-                target_y_low =Ycmpvalue;
+                target_y_low = Ycmpvalue;
                 target_x_low_ave = Archeryinfo->RedTarget.X;
                 ROS_INFO("RedTarget.XMin = %d",Archeryinfo->RedTarget.X);
                 ROS_INFO("Ycmpvalue = %d",Ycmpvalue);
@@ -540,9 +545,16 @@ void KidsizeStrategy::Find_target_mode_old(){	//舊策略
     }
     if (oldstrategy_timeuse >= oldstrategy_find_low_time)  //超過設定的時間就跳出這個副函式
     {
-        ROS_INFO("target_x_low_ave=%d", target_x_low_ave);
-        ROS_INFO("target_y_low=%d", target_y_low);
-        Archeryinfo->Robot_state = find_period;
+        if(fixed_target)
+        {
+            Archeryinfo->Robot_state = start_timer;
+        }
+        else
+        {
+            ROS_INFO("target_x_low_ave=%d", target_x_low_ave);
+            ROS_INFO("target_y_low=%d", target_y_low);
+            Archeryinfo->Robot_state = find_period;
+        }
     }
     
 }
